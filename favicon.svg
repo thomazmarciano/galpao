@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Gradiente_sem_nome_8);
+      }
+
+      .cls-2 {
+        fill: url(#Gradiente_sem_nome_8-2);
+      }
+
+      .cls-3 {
+        fill: url(#Gradiente_sem_nome_8-3);
+      }
+
+      .cls-4 {
+        fill: url(#Gradiente_sem_nome_8-4);
+      }
+
+      .cls-5 {
+        fill: #181818;
+      }
+    </style>
+    <linearGradient id="Gradiente_sem_nome_8" data-name="Gradiente sem nome 8" x1="99.78" y1="235.31" x2="417.74" y2="254.73" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eecb36"/>
+      <stop offset="1" stop-color="#d1492d"/>
+    </linearGradient>
+    <linearGradient id="Gradiente_sem_nome_8-2" data-name="Gradiente sem nome 8" x1="99.47" y1="240.32" x2="417.43" y2="259.74" xlink:href="#Gradiente_sem_nome_8"/>
+    <linearGradient id="Gradiente_sem_nome_8-3" data-name="Gradiente sem nome 8" x1="99.17" y1="245.34" x2="417.13" y2="264.76" xlink:href="#Gradiente_sem_nome_8"/>
+    <linearGradient id="Gradiente_sem_nome_8-4" data-name="Gradiente sem nome 8" x1="98.86" y1="250.36" x2="416.82" y2="269.78" xlink:href="#Gradiente_sem_nome_8"/>
+  </defs>
+  <g id="Camada_1-2" data-name="Camada 1">
+    <g>
+      <rect class="cls-5" x="0" y="0" width="500" height="500" rx="30" ry="30"/>
+      <g>
+        <path class="cls-1" d="M305.52,187.78h67.61c.5,0,.98.18,1.34.52l67,60.76c.44.4.44,1.08,0,1.48l-67,61.16c-.37.34-.85.52-1.35.52h-65.62l66.4-62.22-68.38-62.22Z"/>
+        <path class="cls-2" d="M223.08,187.78h67.61c.5,0,.98.18,1.34.52l67,60.76c.44.4.44,1.08,0,1.48l-67,61.16c-.37.34-.85.52-1.35.52h-65.62l66.4-62.22-68.38-62.22Z"/>
+        <path class="cls-3" d="M140.64,187.78h67.61c.5,0,.98.18,1.34.52l67,60.76c.44.4.44,1.08,0,1.48l-67,61.16c-.37.34-.85.52-1.35.52h-65.62l66.4-62.22-68.38-62.22Z"/>
+        <path class="cls-4" d="M58.2,187.78h67.61c.5,0,.98.18,1.34.52l67,60.76c.44.4.44,1.08,0,1.48l-67,61.16c-.37.34-.85.52-1.35.52H60.19l66.4-62.22-68.38-62.22Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

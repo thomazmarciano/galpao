@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Galpão Prime</title>
+
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f2f2f7;
+        color: #000;
+      }
+
+      #pdfContent {
+        width: 210mm;
+        min-height: 297mm;
+      }
+
+      /* APP */
+      .app {
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      /* HEADER */
+      .header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .header h1 {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      /* CARD estilo iOS */
+      .card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        animation: fadeUp 0.4s ease;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pulse {
+        animation: pulse 0.2s ease;
+      }
+
+      /* LABEL */
+      label {
+        font-size: 13px;
+        color: #8e8e93;
+        margin-top: 12px;
+        display: block;
+      }
+
+      /* INPUT */
+      input[type="text"],
+      input[inputmode="text"],
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid #e5e5ea;
+        background: #f9f9fb;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+
+      input[type="date"] {
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 24px;
+        max-width: 100%;
+        margin-top: 6px;
+        border-radius: 12px;
+        border: 1px solid #e5e5ea;
+        background: #f9f9fb;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+
+      /* FOCO iOS */
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #007aff;
+        background: #fff;
+        transform: scale(1.02);
+      }
+
+      /* SET PARTES SELECIONADAS */
+      /* container */
+      .selected-parts {
+        margin-top: 16px;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: all 0.3s ease;
+      }
+
+      /* aparece */
+      .selected-parts.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+      }
+
+      /* header */
+      .selected-header {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      /* item */
+      .part-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f4f4f4;
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-top: 8px;
+        font-size: 14px;
+      }
+
+      /* botão X */
+      .part-item button {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #888;
+        transition: 0.2s;
+      }
+
+      .part-item button:hover {
+        color: red;
+      }
+
+      /* CHECKLIST */
+      .checklist label {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        font-size: 15px;
+        border-radius: 10px;
+        transition:
+          background 3s ease,
+          transform 3s ease;
+      }
+
+      .checklist label:active {
+        transform: scale(0.97);
+        background: #f0f0f5;
+      }
+
+      /* CARRO */
+      #carContainer {
+        position: relative;
+        display: flex;
+        justify-content: center;
+      }
+
+      .car-img {
+        width: 100%;
+        max-width: 320px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .part {
+        fill: transparent;
+        stroke: none;
+        stroke-width: 1.5;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      /* Ativo */
+      .part.active {
+        /* fill: rgba(255, 0, 0, 0.7); */
+        fill: rgba(255, 0, 0, 0.35);
+        /* stroke: red; */
+      }
+
+      /* Hover só desktop */
+      @media (hover: hover) {
+        .part:hover:not(.active) {
+          fill: rgba(0, 255, 136, 0.2);
+          stroke: #00ff88;
+        }
+      }
+
+      /* BOTÃO iOS */
+
+      .btn-primary {
+        cursor: pointer;
+        width: 100%;
+        padding: 18px;
+        border-radius: 18px;
+        border: none;
+        background: #007aff;
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 10px;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* BOTÃO pressionado */
+      .btn-primary:active {
+        background: #005ecb;
+        transform: scale(0.96);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary:disabled {
+        background: #999;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* STICKY (estilo app real) */
+      .footer {
+        position: sticky;
+        bottom: 0;
+        background: #f2f2f7;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="header">
+        <h1>Galpão Prime</h1>
+      </div>
+
+      <div class="card">
+        <label>Data</label>
+        <input id="data" type="date" required />
+
+        <label>Placa</label>
+        <input
+          id="placa"
+          required
+          placeholder="ABC1234 ou ABC1D23"
+          inputmode="text"
+        />
+
+        <label>Veículo</label>
+        <input id="veiculo" data-uppercase required inputmode="text" />
+
+        <label>Cor</label>
+        <input id="cor" data-uppercase required inputmode="text" />
+      </div>
+
+      <div class="card">
+        <div id="carContainer">
+          <svg
+            width="340"
+            height="600"
+            viewBox="0 0 340 600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <image
+              href="./carro.png"
+              class="car-img"
+              width="100%"
+              height="100%"
+            />
+            <path
+              id="capo"
+              class="part"
+              d="M103.316 148.312L100.897 184.594L103.316 190.198L105.026 195.921H107.563L126.324 186.659L142.547 182.057L157.296 180.405H178.357L193.519 181.585L209.094 184.299L225.259 189.313L236.468 196.275H239.418L243.547 187.603V183.06L240.833 144.831L239.3 125.54L237.53 106.366L235.76 95.0981L231.394 91.6763L223.607 88.3726L213.283 85.4818L191.749 83.122H157.296L146.736 84.5379L131.043 86.1898L123.551 87.9596L113.64 90.7914L109.51 94.9801L108.389 101.411L103.316 148.312Z"
+            />
+            <path
+              id="pc-dianteiro-centro-direito"
+              class="part"
+              d="M173 77.1559V36.6189L252.971 36.6189V37.4136L253.938 37.4673H254.872V38.3908L255.688 38.2941H256.579V39.3036L257.313 39.4039H258.423V58.4271H259.152V65.3699L258.423 66.6196L256.549 67.3486L254.119 66.6196V65.3699L251.221 63.9249H213.846L224.384 82.0673H216.593L206.121 80.3843L200.927 79.2614L194.119 77.1559H173Z"
+            />
+            <path
+              id="pc-dianteiro-centro-esquerdo"
+              class="part"
+              d="M87.1494 56.6823V39.2337L87.872 39.3895H88.7526L89.3862 38.4982L90.4278 38.4123L90.503 37.5102L91.2439 37.6176H92.2748L92.1782 36.6941L93.048 36.6189H173V77.16L151.359 77.1559L144.13 79.2614L138.305 80.3843L133.252 81.2342H121.432L130.598 64.1445H94.5941L91.2637 66.4997H85.9409L86.131 61.1633L87.1494 56.6823Z"
+            />
+            <path
+              id="pc-dianteiro-direito"
+              class="part"
+              d="M281.994 140.542V110.735L282.731 109.883H292.214C292.362 109.883 293.407 110.451 293.911 110.735L299.188 113.278H303.837L308.891 118.628L309.881 136.769H294.728L281.994 140.542Z"
+            />
+            <path
+              id="pc-dianteiro-esquerdo"
+              class="part"
+              d="M63.4323 140.413V110.291L61.7124 109.039H52.2299C52.0823 109.039 51.0369 109.607 50.5326 109.891L45.2563 112.434H40.6073L35.5523 117.784L34.563 135.925H49.7158L63.4323 140.413Z"
+            />
+            <path
+              id="porta-dianteira-esquerda"
+              class="part"
+              d="M40.6864 207.471L39.6816 291.821H85.9052L85.0573 208.336L82.5333 207.271L40.6864 207.471Z"
+            />
+            <path
+              id="porta-dianteira-direita"
+              class="part"
+              d="M304.861 207.471L305.866 291.821H259.642L260.49 208.336L263.014 207.271L304.861 207.471Z"
+            />
+            <path
+              id="porta-traseira-direita"
+              class="part"
+              d="M260.175 293.475L258.543 294.524L257.502 400.753L262.464 403.16L265.362 404.389L277.377 404.052L279.897 399.012L284.321 394.465L288.685 391.146L293.048 388.35L298.118 386.998L304.325 386.015L306.07 384.112L305.482 293.475H260.175Z"
+            />
+            <path
+              id="porta-traseira-esquerda"
+              class="part"
+              d="M85.5759 293.475L87.2078 294.524L88.2496 400.753L83.2875 403.16L80.3888 404.389L68.3743 404.052L65.8547 399.012L61.43 394.465L57.0667 391.146L52.7034 388.35L47.6333 386.998L41.4264 386.015L39.6816 384.112L40.2694 293.475H85.5759Z"
+            />
+            <path
+              id="lateral-esquerda"
+              class="part"
+              d="M64.7587 439.981L65.1649 500.919H67.7209L68.3243 483.399L71.7862 479.778H76.9949L80.8378 482.669V499.057L84.1572 498.888V471.364L91.0127 458.466L99.2901 443.688L108.38 425.356L114.575 411.137L120.111 398.036L124.376 388.438L126.001 380.567H120.923L116.505 391.079L110.411 403.012L106.501 410.477L101.626 418.196L96.5479 426.016L93.044 429.724H90.3526L88.6768 424.29V401.489L85.0713 403.622L82.4814 405.247H68.4657L70.3446 410.477L71.1571 416.266V423.985L69.5829 430.891L64.7587 439.981Z"
+            />
+            <path
+              id="lateral-direita"
+              class="part"
+              d="M280.143 439.981L279.737 500.919H277.181L276.578 483.399L273.116 479.778H267.907L264.064 482.669V499.057L260.745 498.888V471.364L253.889 458.466L245.612 443.688L236.522 425.356L230.327 411.137L224.791 398.036L220.526 388.438L218.901 380.567H223.979L228.397 391.079L234.491 403.012L238.401 410.477L243.276 418.196L248.354 426.016L251.858 429.724H254.549L256.225 424.29V401.489L260.84 403.389L264.306 404.883L276.436 405.247L274.557 410.477L273.745 416.266V423.985L275.319 430.891L280.143 439.981Z"
+            />
+            <path
+              id="retrovisor-esquerdo"
+              class="part"
+              d="M97.3035 235.301L88.6081 236.257L86.8404 235.301V230.858L88.3692 226.558L92.5736 223.787L96.3957 225.746L98.9279 230.046L97.3035 235.301Z"
+            />
+            <path
+              id="retrovisor-direito"
+              class="part"
+              d="M247.844 235.878L257.476 236.257L259.243 235.301V230.858L257.714 226.558L253.51 223.787L249.688 225.746L246.005 229.95L247.844 235.878Z"
+            />
+            <path
+              id="teto"
+              class="part"
+              d="M126.864 380.88L122.588 402.325L129.695 404.307L136.971 405.127L150.702 405.998H187.233L208.803 404.307L222.79 402.258L220.228 393.394L218.281 383.454L217.564 371.926L216.59 346.155V298.762L217.615 278.166L218.435 273.247L219.101 266.996L220.126 257.979L224.634 248.347L222.431 246.451L211.416 245.734L198.712 243.923L184.329 243.275H161.395L146.429 243.923L132.047 245.607L119.802 247.94L123.366 254.353L125.244 263.683L127.706 277.288L128.548 290.374L126.864 380.88Z"
+            />
+            <g id="mala" class="part">
+              <path
+                d="M107.797 477.391V466.086H109.257L111.917 469.673L117.873 472.917L130.087 477.377L132.751 478.124L152.973 481.104H181.414L196.055 480.003L207.328 478.124L218.86 476.051L231.558 470.544L237.713 465.232V470.544L236.741 481.104L235.704 491.146L230.586 493.349L211.993 498.337L187.374 500.022H166.448L137.092 498.339L129.353 497.448L122.627 495.624L115.536 494.044L110.349 491.734L109.499 485.251L107.797 477.391Z"
+              />
+              <path
+                d="M110.346 508.984L108.536 500.875L236.652 501.092L234.95 506.051L233.068 510.975L232.452 514.667L230.57 520.568L229.846 525.817L226.407 532.37L224.126 533.347H120.048L118.201 531.465L116.246 527.519L114.762 522.921L111.975 514.812L110.346 508.984Z"
+              />
+            </g>
+            <path
+              id="pc-traseiro-centro-esquerdo"
+              class="part"
+              d="M117.151 533.607H91.3889L88.4589 537.444L85.5363 542.558V549.552L87.2846 559.575V568.739L91.1307 572.921H94.1767L96.1644 571.733L102.205 569.41H173.172L173.527 534.485H119.758L117.151 533.607Z"
+            />
+            <path
+              id="pc-traseiro-centro-direito"
+              class="part"
+              d="M225.558 533.607H251.319L254.249 537.444L257.172 542.558V549.552L255.424 559.575V568.739L251.577 572.921H248.531L246.544 571.733L240.503 569.41H173.326L173.584 534.485H222.95L225.558 533.607Z"
+            />
+            <path
+              class="part"
+              id="pc-traseiro-esquerdo"
+              d="M63.3818 502.19V441.069L59.2571 445.183L54.3591 449.205L46.1194 452.121H32.3079V460.877L33.3503 471.301L34.3926 484.018L35.2265 496.214L39.0312 500.383L46.066 503.537L49.1617 504.398H60.9957L63.3818 502.19Z"
+            />
+            <path
+              class="part"
+              id="pc-traseiro-direito"
+              d="M281.012 502.19V441.069L285.137 445.183L290.035 449.205L298.275 452.121H312.086V460.877L311.044 471.301L310.001 484.018L309.167 496.214L305.363 500.383L298.328 503.537L295.232 504.398H283.398L281.012 502.19Z"
+            />
+
+            <path
+              id="para-lama-Direito"
+              class="part"
+              d="M304.454 199.052L304.318 206.578L262.799 206.379L258.715 208.105L254.452 211.075V196.187L253.628 184.344L254.452 176.178L255.494 170.796L257.318 158.119L259.137 148.165L260.167 142.432L261.128 137.387L262.329 133.062L263.119 130.11L265.075 123.244L267.169 118.233L272.078 114.148L280.35 110.887V141.162L276.369 145.35L272.181 151.254L269.366 158.119L268.199 162.169V174.458L269.366 179.298L271.185 184.344L274.206 188.566L276.06 191.243L278.325 193.509L281.243 195.396L285.838 197.424L291.129 199.052H304.454Z"
+            />
+            <path
+              id="para-lama-esquerdo"
+              class="part"
+              d="M40.8609 199.052L40.9962 206.578L82.7354 206.379L84.7227 207.206L85.7501 207.679L86.5998 208.105L90.8621 211.074V196.187L91.6867 184.344L90.8621 176.178L89.8204 170.796L87.9966 158.119L86.1773 148.165L85.1476 142.432L84.1864 137.386L82.985 133.061L82.1955 130.109L80.239 123.244L78.1451 118.233L73.2366 114.148L64.3559 110.711V140.842L68.9459 145.35L73.1336 151.254L75.9483 158.119L77.1154 162.169V174.458L75.9483 179.298L74.1291 184.344L71.1084 188.566L69.2549 191.243L66.9894 193.509L64.0717 195.396L59.476 197.424L54.1858 199.052H40.8609Z"
+            />
+            <path
+              id="coluna-esquerda"
+              class="part"
+              d="M91.4427 197.167V212.001L95.7534 218.406L98.5535 222.956L101.645 228.439L105.495 234.273L109.229 241.506L113.079 248.098L116.171 254.331L120.137 262.976L121.479 270.207L122.471 279.482L123.279 288.466V301.865V310.085V318.219V327.981L123.094 340.596L123.008 348.845L122.252 369.381L121.381 374.176L120.839 379.713L125.981 379.67L126.281 365.371L127.509 295.418L127.597 289.441L127.181 283.506L126.752 277.048L125.624 270.952L124.05 262.976L123.462 259.7L122.388 254.639L118.964 248.342L101.296 215.285L97.1812 208.121L91.4427 197.167Z"
+            />
+            <path
+              id="coluna-direita"
+              class="part"
+              d="M253.561 197.066V211.899L249.25 218.304L246.45 222.854L243.358 228.338L239.508 234.171L235.775 241.405L231.925 247.996L228.833 254.229L224.866 262.874L223.524 270.105L222.533 279.381L221.724 288.364V301.763V309.983V318.118V327.879L221.91 340.495L221.995 348.743L222.752 369.28L223.622 374.075L224.165 379.612L219.023 379.569L218.722 365.269L217.822 295.464L218.134 289.393L218.457 283.321L218.651 278.445L220.136 267.077L220.685 261.716L221.17 258.003L223.524 252.997L225.949 247.996L243.708 215.183L247.822 208.019L253.561 197.066Z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <!-- CARD DINÂMICO -->
+      <div id="selectedCard" class="card hidden">
+        <div class="selected-header">
+          <span>Peças selecionadas</span>
+        </div>
+
+        <div id="selectedPartsList"></div>
+      </div>
+
+      <div class="card">
+        <label>Observações</label>
+        <textarea id="observacoes"></textarea>
+      </div>
+
+      <div class="footer">
+        <button class="btn-primary" onclick="gerarPDF()">Gerar PDF</button>
+      </div>
+    </div>
+
+    <canvas
+      id="canvasExport"
+      width="340"
+      height="600"
+      style="display: none"
+    ></canvas>
+
+    <!-- PDF -->
+    <div id="pdfContent" style="position: fixed; top: -9999px; left: -9999px">
+      <h2 style="text-align: center">SMATX Garage Service</h2>
+
+      <p><strong>Data:</strong> <span id="pdf-data"></span></p>
+      <p><strong>Placa:</strong> <span id="pdf-placa"></span></p>
+      <p><strong>Veículo:</strong> <span id="pdf-veiculo"></span></p>
+      <p><strong>Cor:</strong> <span id="pdf-cor"></span></p>
+
+      <h3>Partes</h3>
+      <ul id="pdf-lista"></ul>
+
+      <h3>Observações</h3>
+      <p id="pdf-obs"></p>
+    </div>
+
+    <script>
+      document.querySelectorAll("[data-uppercase]").forEach((input) => {
+        input.addEventListener("input", (e) => {
+          e.target.value = e.target.value.toUpperCase();
+        });
+      });
+
+      function validarPlaca(valor) {
+        const limpa = valor.replace(/[^A-Z0-9]/g, "");
+        return (
+          /^[A-Z]{3}[0-9]{4}$/.test(limpa) ||
+          /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(limpa)
+        );
+      }
+
+      function validarFormulario() {
+        const campos = document.querySelectorAll("input[required]");
+        for (let c of campos) {
+          if (!c.value) {
+            alert("Preencha todos os campos");
+            c.focus();
+            return false;
+          }
+        }
+
+        if (!validarPlaca(document.getElementById("placa").value)) {
+          alert("Placa inválida");
+          return false;
+        }
+
+        return true;
+      }
+
+      document.getElementById("placa").addEventListener("input", (e) => {
+        let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (v.length > 3) v = v.slice(0, 3) + "-" + v.slice(3);
+        e.target.value = v;
+      });
+
+      const dependencies = {
+        "pc-dianteiro-centro-direito": ["pc-dianteiro-direito"],
+        "pc-dianteiro-direito": ["pc-dianteiro-centro-direito"],
+        "pc-dianteiro-centro-esquerdo": ["pc-dianteiro-esquerdo"],
+        "pc-dianteiro-esquerdo": ["pc-dianteiro-centro-esquerdo"],
+        "pc-traseiro-centro-direito": ["pc-traseiro-direito"],
+        "pc-traseiro-direito": ["pc-traseiro-centro-direito"],
+        "pc-traseiro-centro-esquerdo": ["pc-traseiro-esquerdo"],
+        "pc-traseiro-esquerdo": ["pc-traseiro-centro-esquerdo"],
+      };
+
+      const groups = {
+        "pc-dianteiro": [
+          "pc-dianteiro-centro-direito",
+          "pc-dianteiro-centro-esquerdo",
+          "pc-dianteiro-direito",
+          "pc-dianteiro-esquerdo",
+        ],
+        "pc-traseiro": [
+          "pc-traseiro-centro-direito",
+          "pc-traseiro-centro-esquerdo",
+          "pc-traseiro-direito",
+          "pc-traseiro-esquerdo",
+        ],
+      };
+
+      function applyDependencies(id, isActive) {
+        if (!dependencies[id]) return;
+
+        dependencies[id].forEach((depId) => {
+          const el = document.getElementById(depId);
+
+          if (!el) return;
+
+          el.classList.toggle("active", isActive);
+
+          if (isActive) {
+            selectedParts.add(depId);
+          } else {
+            selectedParts.delete(depId);
+          }
+        });
+      }
+
+      const parts = document.querySelectorAll(".part");
+      const selectedParts = new Set();
+
+      parts.forEach((part) => {
+        part.addEventListener("click", () => {
+          const id = part.id;
+          const isActive = !selectedParts.has(id);
+
+          // 1. atualiza Set
+          if (isActive) {
+            selectedParts.add(id);
+          } else {
+            selectedParts.delete(id);
+          }
+
+          part.classList.toggle("active", isActive);
+
+          // 2. aplica dependências (AGORA sincroniza Set também)
+          applyDependencies(id, isActive);
+
+          updateGroups();
+          renderSelectedParts();
+        });
+      });
+
+      function removeNormalized(id) {
+        // FULL
+        if (groups[id]) {
+          groups[id].forEach((partId) => {
+            deactivatePart(partId);
+          });
+          return;
+        }
+
+        // LADO
+        if (id.includes("direito") || id.includes("esquerdo")) {
+          const side = id.includes("direito") ? "direito" : "esquerdo";
+
+          Object.values(groups).forEach((ids) => {
+            ids.forEach((partId) => {
+              if (partId.includes(side)) {
+                deactivatePart(partId);
+              }
+            });
+          });
+        }
+      }
+
+      function updateGroups() {
+        Object.values(groups).forEach((ids) => {
+          const elements = ids.map((id) => document.getElementById(id));
+
+          const allActive = elements.every((el) =>
+            el.classList.contains("active"),
+          );
+
+          elements.forEach((el) => {
+            el.classList.toggle("full", allActive);
+          });
+        });
+      }
+
+      const container = document.getElementById("selectedCard");
+      const list = document.getElementById("selectedPartsList");
+
+      function renderSelectedParts() {
+        list.innerHTML = "";
+
+        const normalized = normalizeSelectedParts();
+
+        if (normalized.size === 0) {
+          container.classList.add("hidden");
+          return;
+        }
+
+        container.classList.remove("hidden");
+
+        normalized.forEach((id) => {
+          const item = document.createElement("div");
+          item.className = "part-item";
+
+          item.innerHTML = `
+            <span>${formatName(id)}</span>
+            <button data-id="${id}">✕</button>
+          `;
+
+          item.querySelector("button").addEventListener("click", () => {
+            removeNormalized(id);
+            deactivatePart(id);
+            updateGroups();
+            renderSelectedParts();
+          });
+
+          list.appendChild(item);
+        });
+      }
+
+      function deactivatePart(id) {
+        selectedParts.delete(id);
+
+        const el = document.getElementById(id);
+        if (el) el.classList.remove("active", "full");
+
+        // 🔴 ESSENCIAL
+        applyDependencies(id, false);
+      }
+
+      function toPascalCase(str) {
+        return str
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      }
+
+      function formatName(id) {
+        const name = id
+          .replaceAll("-", " ")
+          .replace("pc", "Para-choque")
+          .replace("capo", "capô");
+
+        return toPascalCase(name);
+      }
+
+      function normalizeSelectedParts() {
+        const result = new Set();
+
+        // 1. copiar estado atual
+        const active = new Set(selectedParts);
+
+        // 2. aplicar dependências (IMPORTANTE)
+        Object.entries(dependencies).forEach(([key, deps]) => {
+          if (active.has(key)) {
+            deps.forEach((dep) => active.add(dep));
+          }
+        });
+
+        // 3. processar grupos (parachoques)
+        Object.entries(groups).forEach(([groupName, ids]) => {
+          const groupActive = ids.filter((id) => active.has(id));
+
+          if (groupActive.length === 0) return;
+
+          const allActive = ids.every((id) => active.has(id));
+
+          if (allActive) {
+            // 🔴 FULL
+            result.add(groupName);
+          } else {
+            // 🔸 lados (merge inteligente)
+            const ladoDireito =
+              active.has(`${groupName}-direito`) ||
+              active.has(`${groupName}-centro-direito`);
+
+            const ladoEsquerdo =
+              active.has(`${groupName}-esquerdo`) ||
+              active.has(`${groupName}-centro-esquerdo`);
+
+            if (ladoDireito) result.add(`${groupName}-direito`);
+            if (ladoEsquerdo) result.add(`${groupName}-esquerdo`);
+          }
+
+          // remove do active para não duplicar depois
+          ids.forEach((id) => active.delete(id));
+        });
+
+        // 4. o que sobrou = peças independentes (EX: teto)
+        active.forEach((id) => result.add(id));
+
+        return result;
+      }
+
+      function drawToCanvas() {
+        const canvas = document.getElementById("canvasExport");
+        const ctx = canvas.getContext("2d");
+
+        const img = new Image();
+        img.src = "carro.png";
+
+        img.onload = () => {
+          // limpa
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // desenha carro base
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          // desenha partes ativas
+          document.querySelectorAll(".part.active").forEach((path) => {
+            const d = path.getAttribute("d");
+
+            drawPath(ctx, d, path.classList.contains("full"));
+          });
+        };
+      }
+
+      function drawPath(ctx, d, isFull) {
+        const path = new Path2D(d);
+
+        ctx.fillStyle = isFull ? "rgba(255,0,0,0.4)" : "rgba(255,0,0,0.4)";
+
+        ctx.fill(path);
+      }
+
+      function addPartsList(doc) {
+        const normalized = normalizeSelectedParts();
+
+        let y = 340;
+
+        doc.setFontSize(14);
+        doc.text("Peças selecionadas:", 20, y);
+
+        y += 10;
+
+        doc.setFontSize(11);
+
+        normalized.forEach((id) => {
+          const name = formatName(id);
+
+          doc.text(`• ${name}`, 25, y);
+          y += 8;
+        });
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return "—";
+
+        const [year, month, day] = dateStr.split("-");
+        return `${day}/${month}/${year}`;
+      }
+
+      async function gerarPDF() {
+        if (!validarFormulario()) return;
+
+        const btn = document.querySelector(".btn-primary");
+
+        btn.innerText = "Gerando...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+
+        drawToCanvas();
+
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        const canvas = document.getElementById("canvasExport");
+        const imgData = canvas.toDataURL("image/png");
+
+        const { jsPDF } = window.jspdf;
+
+        const doc = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+        });
+
+        const data = document.getElementById("data").value;
+        const veiculo = document.getElementById("veiculo").value;
+        const cor = document.getElementById("cor").value;
+        const placa = document.getElementById("placa").value || "sem-placa";
+        const obs = document.getElementById("observacoes").value;
+
+        const margin = 15;
+        const pageWidth = doc.internal.pageSize.getWidth();
+
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("GALPÃO PRIME", pageWidth / 2, 15, { align: "center" });
+
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+
+        doc.text(`Data: ${formatDate(data)}`, margin, 25);
+        doc.text(`Placa: ${placa}`, margin, 32);
+        doc.text(`Veículo: ${veiculo || "—"}`, pageWidth / 4, 25);
+        doc.text(`Cor: ${cor || "—"}`, pageWidth / 4, 32);
+
+        doc.setDrawColor(220);
+        doc.line(margin, 40, pageWidth - margin, 40);
+
+        const imgWidth = 80;
+        const imgHeight = 140;
+
+        const carX = margin;
+        const carY = 57;
+
+        doc.addImage(imgData, "PNG", carX, carY, imgWidth, imgHeight);
+
+        const parts = Array.from(normalizeSelectedParts()).sort();
+
+        let startX = carX + imgWidth + 10;
+        let startY = 57;
+
+        doc.setFont("helvetica", "bold");
+        doc.text("Peças selecionadas", startX, startY);
+
+        startY += 8;
+
+        doc.setFont("helvetica", "normal");
+
+        parts.forEach((id, index) => {
+          const name = formatName(id);
+
+          doc.text(`• ${name}`, startX, startY + index * 7);
+        });
+
+        const obsY = 210;
+
+        doc.setFont("helvetica", "bold");
+        doc.text("Observações", margin, obsY);
+
+        // box
+        doc.setDrawColor(200);
+        doc.rect(margin, obsY + 5, pageWidth - margin * 2, 45);
+
+        doc.setFont("helvetica", "normal");
+
+        const obsLines = doc.splitTextToSize(
+          obs || "—",
+          pageWidth - margin * 2 - 5,
+        );
+
+        doc.text(obsLines, margin + 5, obsY + 12);
+
+        doc.save(`galpao-${placa}.pdf`);
+
+        btn.innerText = "Gerado ✓";
+
+        setTimeout(() => {
+          btn.innerText = "Gerar PDF";
+          btn.style.opacity = "1";
+          btn.disabled = false;
+        }, 1500);
+      }
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(() => console.log("SW registrado"))
+          .catch((err) => console.log("Erro SW", err));
+      }
+    </script>
+  </body>
+</html>
