@@ -1,8 +1,9 @@
 const CACHE_NAME = "galpao-v1";
 
 const urlsToCache = [
-  "/index.html",
-  "/carro.png",
+  "./index.html",
+  "./carro.png",
+  "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
 ];
