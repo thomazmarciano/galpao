@@ -6,6 +6,11 @@
 
     <link rel="manifest" href="./manifest.json" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./favicon-192.png" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Galpão Prime" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -363,12 +368,12 @@
               d="M85.5759 293.475L87.2078 294.524L88.2496 400.753L83.2875 403.16L80.3888 404.389L68.3743 404.052L65.8547 399.012L61.43 394.465L57.0667 391.146L52.7034 388.35L47.6333 386.998L41.4264 386.015L39.6816 384.112L40.2694 293.475H85.5759Z"
             />
             <path
-              id="lateral-esquerda"
+              id="lateral-traseira-esquerda"
               class="part"
               d="M64.7587 439.981L65.1649 500.919H67.7209L68.3243 483.399L71.7862 479.778H76.9949L80.8378 482.669V499.057L84.1572 498.888V471.364L91.0127 458.466L99.2901 443.688L108.38 425.356L114.575 411.137L120.111 398.036L124.376 388.438L126.001 380.567H120.923L116.505 391.079L110.411 403.012L106.501 410.477L101.626 418.196L96.5479 426.016L93.044 429.724H90.3526L88.6768 424.29V401.489L85.0713 403.622L82.4814 405.247H68.4657L70.3446 410.477L71.1571 416.266V423.985L69.5829 430.891L64.7587 439.981Z"
             />
             <path
-              id="lateral-direita"
+              id="lateral-traseira-direita"
               class="part"
               d="M280.143 439.981L279.737 500.919H277.181L276.578 483.399L273.116 479.778H267.907L264.064 482.669V499.057L260.745 498.888V471.364L253.889 458.466L245.612 443.688L236.522 425.356L230.327 411.137L224.791 398.036L220.526 388.438L218.901 380.567H223.979L228.397 391.079L234.491 403.012L238.401 410.477L243.276 418.196L248.354 426.016L251.858 429.724H254.549L256.225 424.29V401.489L260.84 403.389L264.306 404.883L276.436 405.247L274.557 410.477L273.745 416.266V423.985L275.319 430.891L280.143 439.981Z"
             />
@@ -387,14 +392,18 @@
               class="part"
               d="M126.864 380.88L122.588 402.325L129.695 404.307L136.971 405.127L150.702 405.998H187.233L208.803 404.307L222.79 402.258L220.228 393.394L218.281 383.454L217.564 371.926L216.59 346.155V298.762L217.615 278.166L218.435 273.247L219.101 266.996L220.126 257.979L224.634 248.347L222.431 246.451L211.416 245.734L198.712 243.923L184.329 243.275H161.395L146.429 243.923L132.047 245.607L119.802 247.94L123.366 254.353L125.244 263.683L127.706 277.288L128.548 290.374L126.864 380.88Z"
             />
-            <g id="mala" class="part">
-              <path
-                d="M107.797 477.391V466.086H109.257L111.917 469.673L117.873 472.917L130.087 477.377L132.751 478.124L152.973 481.104H181.414L196.055 480.003L207.328 478.124L218.86 476.051L231.558 470.544L237.713 465.232V470.544L236.741 481.104L235.704 491.146L230.586 493.349L211.993 498.337L187.374 500.022H166.448L137.092 498.339L129.353 497.448L122.627 495.624L115.536 494.044L110.349 491.734L109.499 485.251L107.797 477.391Z"
-              />
-              <path
-                d="M110.346 508.984L108.536 500.875L236.652 501.092L234.95 506.051L233.068 510.975L232.452 514.667L230.57 520.568L229.846 525.817L226.407 532.37L224.126 533.347H120.048L118.201 531.465L116.246 527.519L114.762 522.921L111.975 514.812L110.346 508.984Z"
-              />
-            </g>
+
+            <path
+              id="mala-superior"
+              class="part"
+              d="M107.797 477.391V466.086H109.257L111.917 469.673L117.873 472.917L130.087 477.377L132.751 478.124L152.973 481.104H181.414L196.055 480.003L207.328 478.124L218.86 476.051L231.558 470.544L237.713 465.232V470.544L236.741 481.104L235.704 491.146L230.586 493.349L211.993 498.337L187.374 500.022H166.448L137.092 498.339L129.353 497.448L122.627 495.624L115.536 494.044L110.349 491.734L109.499 485.251L107.797 477.391Z"
+            />
+            <path
+              id="mala-traseira"
+              class="part"
+              d="M110.346 508.984L108.536 500.875L236.652 501.092L234.95 506.051L233.068 510.975L232.452 514.667L230.57 520.568L229.846 525.817L226.407 532.37L224.126 533.347H120.048L118.201 531.465L116.246 527.519L114.762 522.921L111.975 514.812L110.346 508.984Z"
+            />
+
             <path
               id="pc-traseiro-centro-esquerdo"
               class="part"
@@ -443,7 +452,7 @@
       <!-- CARD DINÂMICO -->
       <div id="selectedCard" class="card hidden">
         <div class="selected-header">
-          <span>Peças selecionadas</span>
+          <span>Partes a serem tratadas:</span>
         </div>
 
         <div id="selectedPartsList"></div>
@@ -530,6 +539,8 @@
         "pc-traseiro-direito": ["pc-traseiro-centro-direito"],
         "pc-traseiro-centro-esquerdo": ["pc-traseiro-esquerdo"],
         "pc-traseiro-esquerdo": ["pc-traseiro-centro-esquerdo"],
+        "mala-traseira": ["mala-superior"],
+        "mala-superior": ["mala-traseira"],
       };
 
       const groups = {
@@ -545,6 +556,7 @@
           "pc-traseiro-direito",
           "pc-traseiro-esquerdo",
         ],
+        mala: ["mala-traseira", "mala-superior"],
       };
 
       function applyDependencies(id, isActive) {
@@ -680,10 +692,17 @@
       }
 
       function formatName(id) {
-        const name = id
+        let name = id
           .replaceAll("-", " ")
           .replace("pc", "Para-choque")
           .replace("capo", "capô");
+
+        const isParaChoque = id.startsWith("pc-");
+        const isLado = id.includes("direito") || id.includes("esquerdo");
+
+        if (isParaChoque && isLado) {
+          name = "Retoque " + name;
+        }
 
         return toPascalCase(name);
       }
@@ -773,7 +792,7 @@
         let y = 340;
 
         doc.setFontSize(14);
-        doc.text("Peças selecionadas:", 20, y);
+        doc.text("Partes a serem tratadas:  ", 20, y);
 
         y += 10;
 
@@ -886,15 +905,49 @@
 
         doc.text(obsLines, margin + 5, obsY + 12);
 
-        doc.save(`galpao-${placa}.pdf`);
+        // 🔥 gera PDF como blob
+        const blob = doc.output("blob");
 
-        btn.innerText = "Gerado ✓";
+        const file = new File([blob], `galpao-${placa}.pdf`, {
+          type: "application/pdf",
+        });
+
+        try {
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: "Relatório",
+              text: "Relatório do veículo",
+            });
+          } else {
+            // fallback (iPhone / desktop)
+            const url = URL.createObjectURL(blob);
+            window.open(url);
+          }
+
+          btn.innerText = "Compartilhado ✓";
+        } catch (err) {
+          console.log("Erro ou cancelado:", err);
+
+          // fallback seguro
+          doc.save(`galpao-${placa}.pdf`);
+        }
 
         setTimeout(() => {
           btn.innerText = "Gerar PDF";
           btn.style.opacity = "1";
           btn.disabled = false;
         }, 1500);
+
+        // doc.save(`galpao-${placa}.pdf`);
+
+        // btn.innerText = "Gerado ✓";
+
+        // setTimeout(() => {
+        //   btn.innerText = "Gerar PDF";
+        //   btn.style.opacity = "1";
+        //   btn.disabled = false;
+        // }, 1500);
       }
 
       if ("serviceWorker" in navigator) {
