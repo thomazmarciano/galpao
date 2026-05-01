@@ -15,6 +15,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <script>
+      const LOGO_GALPAO =
+        "data:image/jpeg;base64,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";
+    </script>
+
     <style>
       body {
         margin: 0;
@@ -394,7 +399,7 @@
             />
 
             <path
-              id="mala-superior"
+              id="aerofolio"
               class="part"
               d="M107.797 477.391V466.086H109.257L111.917 469.673L117.873 472.917L130.087 477.377L132.751 478.124L152.973 481.104H181.414L196.055 480.003L207.328 478.124L218.86 476.051L231.558 470.544L237.713 465.232V470.544L236.741 481.104L235.704 491.146L230.586 493.349L211.993 498.337L187.374 500.022H166.448L137.092 498.339L129.353 497.448L122.627 495.624L115.536 494.044L110.349 491.734L109.499 485.251L107.797 477.391Z"
             />
@@ -445,6 +450,16 @@
               class="part"
               d="M253.561 197.066V211.899L249.25 218.304L246.45 222.854L243.358 228.338L239.508 234.171L235.775 241.405L231.925 247.996L228.833 254.229L224.866 262.874L223.524 270.105L222.533 279.381L221.724 288.364V301.763V309.983V318.118V327.879L221.91 340.495L221.995 348.743L222.752 369.28L223.622 374.075L224.165 379.612L219.023 379.569L218.722 365.269L217.822 295.464L218.134 289.393L218.457 283.321L218.651 278.445L220.136 267.077L220.685 261.716L221.17 258.003L223.524 252.997L225.949 247.996L243.708 215.183L247.822 208.019L253.561 197.066Z"
             />
+            <path
+              id="caixa-de-ar-direita"
+              class="part"
+              d="M310.697 228.756V198.886H305.606L305.382 206.297L306.205 207.458L306.916 291.64V293.587L307.44 383.309L306.804 391.582H309.499L313.654 388.662L312.419 343.221L311.633 269.556L310.697 228.756Z"
+            />
+            <path
+              id="caixa-de-ar-esquerda"
+              d="M31.8734 294.915L32.6207 248.57L33.4963 198.645L38.4599 199.326V389.777L29.8927 389.898V366.76L30.793 337.5L31.8734 294.915Z"
+              class="part"
+            />
           </svg>
         </div>
       </div>
@@ -464,7 +479,9 @@
       </div>
 
       <div class="footer">
-        <button class="btn-primary" onclick="gerarPDF()">Gerar PDF</button>
+        <button class="btn-primary" onclick="gerarPDF()">
+          Compartilhar PDF
+        </button>
       </div>
     </div>
 
@@ -539,8 +556,6 @@
         "pc-traseiro-direito": ["pc-traseiro-centro-direito"],
         "pc-traseiro-centro-esquerdo": ["pc-traseiro-esquerdo"],
         "pc-traseiro-esquerdo": ["pc-traseiro-centro-esquerdo"],
-        "mala-traseira": ["mala-superior"],
-        "mala-superior": ["mala-traseira"],
       };
 
       const groups = {
@@ -556,7 +571,6 @@
           "pc-traseiro-direito",
           "pc-traseiro-esquerdo",
         ],
-        mala: ["mala-traseira", "mala-superior"],
       };
 
       function applyDependencies(id, isActive) {
@@ -685,9 +699,31 @@
       }
 
       function toPascalCase(str) {
+        const minusculas = [
+          "de",
+          "da",
+          "do",
+          "das",
+          "dos",
+          "e",
+          "a",
+          "o",
+          "em",
+          "com",
+          "por",
+          "para",
+          "um",
+          "uma",
+        ];
+
         return str
           .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .map((word, index) => {
+            if (index !== 0 && minusculas.includes(word.toLowerCase())) {
+              return word.toLowerCase();
+            }
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          })
           .join(" ");
       }
 
@@ -695,7 +731,9 @@
         let name = id
           .replaceAll("-", " ")
           .replace("pc", "Para-choque")
-          .replace("capo", "capô");
+          .replace("capo", "capô")
+          .replace("capo", "capô")
+          .replace("aerofolio", "aerofólio");
 
         const isParaChoque = id.startsWith("pc-");
         const isLado = id.includes("direito") || id.includes("esquerdo");
@@ -813,104 +851,323 @@
         return `${day}/${month}/${year}`;
       }
 
+      // async function gerarPDF() {
+      //   if (!validarFormulario()) return;
+
+      //   const btn = document.querySelector(".btn-primary");
+
+      //   btn.innerText = "Gerando...";
+      //   btn.style.opacity = "0.7";
+      //   btn.disabled = true;
+
+      //   drawToCanvas();
+
+      //   await new Promise((resolve) => setTimeout(resolve, 300));
+
+      //   const canvas = document.getElementById("canvasExport");
+      //   const imgData = canvas.toDataURL("image/png");
+
+      //   const { jsPDF } = window.jspdf;
+
+      //   const doc = new jsPDF({
+      //     orientation: "portrait",
+      //     unit: "mm",
+      //     format: "a4",
+      //   });
+
+      //   const data = document.getElementById("data").value;
+      //   const veiculo = document.getElementById("veiculo").value;
+      //   const cor = document.getElementById("cor").value;
+      //   const placa = document.getElementById("placa").value || "sem-placa";
+      //   const obs = document.getElementById("observacoes").value;
+
+      //   const margin = 15;
+      //   const pageWidth = doc.internal.pageSize.getWidth();
+
+      //   doc.setFontSize(16);
+      //   doc.setFont("helvetica", "bold");
+      //   doc.text("GALPÃO PRIME", pageWidth / 2, 15, { align: "center" });
+
+      //   doc.setFontSize(11);
+      //   doc.setFont("helvetica", "normal");
+
+      //   doc.text(`Data: ${formatDate(data)}`, margin, 25);
+      //   doc.text(`Placa: ${placa}`, margin, 32);
+      //   doc.text(`Veículo: ${veiculo || "—"}`, pageWidth / 4, 25);
+      //   doc.text(`Cor: ${cor || "—"}`, pageWidth / 4, 32);
+
+      //   doc.setDrawColor(220);
+      //   doc.line(margin, 40, pageWidth - margin, 40);
+
+      //   const imgWidth = 80;
+      //   const imgHeight = 140;
+
+      //   const carX = margin;
+      //   const carY = 57;
+
+      //   doc.addImage(imgData, "PNG", carX, carY, imgWidth, imgHeight);
+
+      //   const parts = Array.from(normalizeSelectedParts()).sort();
+
+      //   let startX = carX + imgWidth + 10;
+      //   let startY = 57;
+
+      //   doc.setFont("helvetica", "bold");
+      //   doc.text("Peças selecionadas", startX, startY);
+
+      //   startY += 8;
+
+      //   doc.setFont("helvetica", "normal");
+
+      //   parts.forEach((id, index) => {
+      //     const name = formatName(id);
+
+      //     doc.text(`• ${name}`, startX, startY + index * 7);
+      //   });
+
+      //   const obsY = 210;
+
+      //   doc.setFont("helvetica", "bold");
+      //   doc.text("Observações", margin, obsY);
+
+      //   // box
+      //   doc.setDrawColor(200);
+      //   doc.rect(margin, obsY + 5, pageWidth - margin * 2, 45);
+
+      //   doc.setFont("helvetica", "normal");
+
+      //   const obsLines = doc.splitTextToSize(
+      //     obs || "—",
+      //     pageWidth - margin * 2 - 5,
+      //   );
+
+      //   doc.text(obsLines, margin + 5, obsY + 12);
+
+      //   // 🔥 gera PDF como blob
+      //   const blob = doc.output("blob");
+
+      //   const file = new File([blob], `galpao-${placa}.pdf`, {
+      //     type: "application/pdf",
+      //   });
+
+      //   try {
+      //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      //       await navigator.share({
+      //         files: [file],
+      //         title: "Relatório",
+      //         text: "Relatório do veículo",
+      //       });
+      //     } else {
+      //       // fallback (iPhone / desktop)
+      //       const url = URL.createObjectURL(blob);
+      //       window.open(url);
+      //     }
+
+      //     btn.innerText = "Compartilhado ✓";
+      //   } catch (err) {
+      //     console.log("Erro ou cancelado:", err);
+
+      //     // fallback seguro
+      //     doc.save(`galpao-${placa}.pdf`);
+      //   }
+
+      //   setTimeout(() => {
+      //     btn.innerText = "Compartilhar PDF";
+      //     btn.style.opacity = "1";
+      //     btn.disabled = false;
+      //   }, 1500);
+      // }
+
       async function gerarPDF() {
         if (!validarFormulario()) return;
 
         const btn = document.querySelector(".btn-primary");
-
         btn.innerText = "Gerando...";
         btn.style.opacity = "0.7";
         btn.disabled = true;
 
         drawToCanvas();
-
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         const canvas = document.getElementById("canvasExport");
         const imgData = canvas.toDataURL("image/png");
 
         const { jsPDF } = window.jspdf;
-
         const doc = new jsPDF({
           orientation: "portrait",
           unit: "mm",
           format: "a4",
         });
 
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const margin = 15;
+        const innerW = pageW - margin * 2;
+
+        // ── dados do formulário
         const data = document.getElementById("data").value;
-        const veiculo = document.getElementById("veiculo").value;
-        const cor = document.getElementById("cor").value;
+        const veiculo = document.getElementById("veiculo").value || "—";
+        const cor = document.getElementById("cor").value || "—";
         const placa = document.getElementById("placa").value || "sem-placa";
         const obs = document.getElementById("observacoes").value;
+        const os = `OS-${Date.now().toString().slice(-6)}`;
 
-        const margin = 15;
-        const pageWidth = doc.internal.pageSize.getWidth();
+        // ── 1. CABEÇALHO — faixa colorida
+        doc.setFillColor(30, 30, 30);
+        doc.rect(0, 0, pageW, 28, "F");
+        doc.setFillColor(220, 50, 50);
+        doc.rect(0, 0, 5, 28, "F");
 
-        doc.setFontSize(16);
+        doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
-        doc.text("GALPÃO PRIME", pageWidth / 2, 15, { align: "center" });
-
-        doc.setFontSize(11);
-        doc.setFont("helvetica", "normal");
-
-        doc.text(`Data: ${formatDate(data)}`, margin, 25);
-        doc.text(`Placa: ${placa}`, margin, 32);
-        doc.text(`Veículo: ${veiculo || "—"}`, pageWidth / 4, 25);
-        doc.text(`Cor: ${cor || "—"}`, pageWidth / 4, 32);
-
-        doc.setDrawColor(220);
-        doc.line(margin, 40, pageWidth - margin, 40);
-
-        const imgWidth = 80;
-        const imgHeight = 140;
-
-        const carX = margin;
-        const carY = 57;
-
-        doc.addImage(imgData, "PNG", carX, carY, imgWidth, imgHeight);
-
-        const parts = Array.from(normalizeSelectedParts()).sort();
-
-        let startX = carX + imgWidth + 10;
-        let startY = 57;
-
-        doc.setFont("helvetica", "bold");
-        doc.text("Peças selecionadas", startX, startY);
-
-        startY += 8;
+        doc.setFontSize(18);
+        doc.addImage(LOGO_GALPAO, 10, 5, 40, 15);
+        doc.text("GALPÃO PRIME", pageW / 2, 14, { align: "center" });
 
         doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(180, 180, 180);
+        doc.text("Rua Maranhão n 221", 12, 21);
+        doc.text("Pituba, Salvador, Bahia, Brasil", 12, 24);
 
-        parts.forEach((id, index) => {
-          const name = formatName(id);
+        // doc.setFontSize(9);
+        // doc.setFont("helvetica", "bold");
+        // doc.setTextColor(220, 50, 50);
+        // doc.text(os, pageW - margin, 12, { align: "right" });
+        // doc.setFont("helvetica", "normal");
+        // doc.setFontSize(7);
+        // doc.setTextColor(150, 150, 150);
+        // doc.text("Nº Ordem de Serviço", pageW - margin, 18, { align: "right" });
 
-          doc.text(`• ${name}`, startX, startY + index * 7);
+        // ── 2. CARD DE DADOS DO VEÍCULO
+        const cardY = 33;
+        doc.setFillColor(245, 245, 245);
+        doc.roundedRect(margin, cardY, innerW, 20, 2, 2, "F");
+
+        const campos = [
+          ["DATA", formatDate(data)],
+          ["VEÍCULO", veiculo],
+          ["COR", cor],
+          ["PLACA", placa],
+        ];
+
+        const colW = innerW / 4;
+        campos.forEach(([label, value], i) => {
+          const x = margin + i * colW + 4;
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(7);
+          doc.setTextColor(150, 150, 150);
+          doc.text(label, x, cardY + 6);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          doc.setTextColor(30, 30, 30);
+          doc.text(value, x, cardY + 14);
         });
 
-        const obsY = 210;
+        // ── 3. IMAGEM DO CARRO
+        const imgY = 58;
+        const imgW = 75;
+        const imgH = 130;
 
+        doc.setFillColor(250, 250, 250);
+        doc.roundedRect(margin, imgY, imgW + 4, imgH + 4, 3, 3, "F");
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(margin, imgY, imgW + 4, imgH + 4, 3, 3, "S");
+        doc.addImage(imgData, "PNG", margin + 2, imgY + 2, imgW, imgH);
+
+        // ── 4. TABELA DE PEÇAS
+        const tableX = margin + imgW + 10;
+        const tableW = innerW - imgW - 10;
+        let tableY = imgY;
+
+        doc.setFillColor(30, 30, 30);
+        doc.roundedRect(tableX, tableY, tableW, 8, 2, 2, "F");
         doc.setFont("helvetica", "bold");
-        doc.text("Observações", margin, obsY);
+        doc.setFontSize(9);
+        doc.setTextColor(255, 255, 255);
+        doc.text("PEÇAS SELECIONADAS", tableX + 3, tableY + 5.5);
+        tableY += 8;
 
-        // box
-        doc.setDrawColor(200);
-        doc.rect(margin, obsY + 5, pageWidth - margin * 2, 45);
+        const parts = Array.from(normalizeSelectedParts()).sort();
+        const rowH = 8;
+
+        parts.forEach((id, i) => {
+          const y = tableY + i * rowH;
+          const isEven = i % 2 === 0;
+
+          doc.setFillColor(
+            isEven ? 248 : 255,
+            isEven ? 248 : 255,
+            isEven ? 248 : 255,
+          );
+          doc.rect(tableX, y, tableW, rowH, "F");
+
+          doc.setFillColor(220, 50, 50);
+          doc.circle(tableX + 4, y + rowH / 2, 1.2, "F");
+
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(9);
+          doc.setTextColor(40, 40, 40);
+          doc.text(formatName(id), tableX + 8, y + 5.5);
+
+          doc.setDrawColor(230);
+          doc.setLineWidth(0.1);
+          doc.line(tableX, y + rowH, tableX + tableW, y + rowH);
+        });
+
+        // ── 5. OBSERVAÇÕES
+        const obsY = 205;
+        doc.setFillColor(30, 30, 30);
+        doc.roundedRect(margin, obsY, 42, 7, 2, 2, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(255, 255, 255);
+        doc.text("OBSERVAÇÕES", margin + 3, obsY + 5);
+
+        doc.setDrawColor(210);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(margin, obsY + 9, innerW, 42, 2, 2, "S");
 
         doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(50, 50, 50);
+        const obsLines = doc.splitTextToSize(obs || "—", innerW - 8);
+        doc.text(obsLines, margin + 4, obsY + 16);
 
-        const obsLines = doc.splitTextToSize(
-          obs || "—",
-          pageWidth - margin * 2 - 5,
+        // ── 6. RODAPÉ
+        doc.setFillColor(245, 245, 245);
+        doc.rect(0, pageH - 14, pageW, 14, "F");
+        doc.setFillColor(220, 50, 50);
+        doc.rect(0, pageH - 14, 5, 14, "F");
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(130, 130, 130);
+        doc.text("Documento interno para execução de serviços", 12, pageH - 7);
+        doc.text(
+          `Emitido em ${new Date().toLocaleString("pt-BR")}`,
+          pageW / 2,
+          pageH - 7,
+          { align: "center" },
+        );
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(100, 100, 100);
+        doc.text(
+          "Desenvolvido por SMATX Tecnologia",
+          pageW - margin,
+          pageH - 7,
+          { align: "right" },
         );
 
-        doc.text(obsLines, margin + 5, obsY + 12);
-
-        // 🔥 gera PDF como blob
+        // ── 7. SALVA
         const blob = doc.output("blob");
-
         const file = new File([blob], `galpao-${placa}.pdf`, {
           type: "application/pdf",
         });
+
+        btn.innerText = "Compartilhar PDF";
+        btn.style.opacity = "1";
 
         try {
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -934,20 +1191,10 @@
         }
 
         setTimeout(() => {
-          btn.innerText = "Gerar PDF";
+          btn.innerText = "Compartilhar PDF";
           btn.style.opacity = "1";
           btn.disabled = false;
         }, 1500);
-
-        // doc.save(`galpao-${placa}.pdf`);
-
-        // btn.innerText = "Gerado ✓";
-
-        // setTimeout(() => {
-        //   btn.innerText = "Gerar PDF";
-        //   btn.style.opacity = "1";
-        //   btn.disabled = false;
-        // }, 1500);
       }
 
       if ("serviceWorker" in navigator) {
